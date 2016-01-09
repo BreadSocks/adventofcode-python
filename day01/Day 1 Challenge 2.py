@@ -8,5 +8,5 @@ for index, character in enumerate(data):
 
         if counter == -1:
             # +1 on index as first character is 0 in array but 1 in count
-            print "Answer : It took " + str(index + 1) + " visits before hitting the basement"
+            print "Answer : It took", index + 1, "visits before hitting the basement"
             break

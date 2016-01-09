@@ -6,4 +6,4 @@ for character in data:
     else:
         counter -= 1
 
-print "Answer : He would arrive on the " + str(counter) + "th floor"
+print "Answer : He would arrive on the", str(counter) + "th floor"
