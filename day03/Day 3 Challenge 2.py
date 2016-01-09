@@ -1,28 +1,29 @@
 data = open("input.txt").read()
 santaPoints = ["0,0"]
 robotPoints = ["0,0"]
+
+
+def go_to_next_house(array, next_character):
+    previous_location = array[len(array) - 1]
+    previous_point = map(int, previous_location.split(","))
+    x_axis = previous_point[0]
+    y_axis = previous_point[1]
+    if next_character == "^":
+        y_axis += 1
+    elif next_character == ">":
+        x_axis += 1
+    elif next_character == "v":
+        y_axis -= 1
+    elif next_character == "<":
+        x_axis -= 1
+    house = str(x_axis) + "," + str(y_axis)
+    array.append(house)
+
 for index, character in enumerate(data):
     if index % 2 == 0:
-        previousLocation = santaPoints[len(santaPoints) - 1]
+        go_to_next_house(santaPoints, character)
     else:
-        previousLocation = robotPoints[len(robotPoints) - 1]
-    previousPoint = map(int, previousLocation.split(","))
-    xAxis = previousPoint[0]
-    yAxis = previousPoint[1]
-    if character == "^":
-        yAxis += 1
-    elif character == ">":
-        xAxis += 1
-    elif character == "v":
-        yAxis -= 1
-    elif character == "<":
-        xAxis -= 1
-
-    house = str(xAxis) + "," + str(yAxis)
-    if index % 2 == 0:
-        santaPoints.append(house)
-    else:
-        robotPoints.append(house)
+        go_to_next_house(robotPoints, character)
 
 totalList = santaPoints + robotPoints
 print "Houses that receive at least one present : ", len(set(totalList))
