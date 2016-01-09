@@ -1,19 +1,7 @@
+from Day3 import SantaRoute
 data = open("input.txt").read()
-gridPoints = ["0,0"]
+gridPoints = SantaRoute()
 for character in data:
-    #  get previous point
-    previousLocation = gridPoints[len(gridPoints) - 1]
-    previousPoint = map(int, previousLocation.split(","))
-    xAxis = previousPoint[0]
-    yAxis = previousPoint[1]
-    if character == "^":
-        yAxis += 1
-    elif character == ">":
-        xAxis += 1
-    elif character == "v":
-        yAxis -= 1
-    elif character == "<":
-        xAxis -= 1
+    gridPoints.go_to_next_house(character)
 
-    gridPoints.append(str(xAxis) + "," + str(yAxis))
-print "Houses that receive at least one present :", len(set(gridPoints))
+print "Houses that receive at least one present :", gridPoints.number_of_unique_houses()
