@@ -1,11 +1,33 @@
 import string
 alphabet = list(string.ascii_lowercase)
 disallowed = ["i", "o", "l"]
-# data = "abcdefgh" correct
-data = "ghijklmn"  # gets stuck somewhere
-# data = "hxbxwxba"
+# data = "abcdefgh" # correct
+# data = "ghijklmn"  # gets stuck somewhere
+data = "hxbxwxba"
+
+
+def create_valid_password(currentpassword):
+    for character in disallowed:
+        if character in currentpassword:
+            invalid_index = currentpassword.index(character)
+            currentpasswordlist = list(currentpassword)
+            # currentpasswordlist[invalid_index] = alphabet[invalid_index + 1] if invalid_index < len(alphabet) else alphabet[0]
+            new_letter_index = alphabet.index(character) + 1
+            currentpasswordlist[invalid_index] = alphabet[new_letter_index] if new_letter_index < len(alphabet) else \
+            alphabet[0]
+            for x in range(invalid_index + 1, len(currentpassword)):
+                currentpasswordlist[x] = alphabet[0]
+            currentpassword = "".join(currentpasswordlist)
+    return currentpassword
+
 
 def nextpassword(currentpassword):
+    contains_invalid_letters = True
+    while contains_invalid_letter(currentpassword):
+        currentpassword = create_valid_password(currentpassword)
+        contains_invalid_letters = contains_invalid_letter(currentpassword)
+
+
     passwordasarray = list(currentpassword)
     lettertochange = passwordasarray[len(passwordasarray) - 1]
     if lettertochange != alphabet[len(alphabet) - 1]:
@@ -14,13 +36,24 @@ def nextpassword(currentpassword):
     else:
         for n in range(len(currentpassword) - 1, 0, -1):
             if currentpassword[n] == alphabet[len(alphabet) - 1]:
-                passwordasarray[n] = "a"
+                passwordasarray[n] = alphabet[0]
             else:
                 passwordasarray[n] = alphabet[alphabet.index(passwordasarray[n]) + 1]
                 break
     return "".join(passwordasarray)
 
+
+def contains_invalid_letter(password):
+    for character in disallowed:
+        if character in password:
+            return True
+    return False
+
+
 def isvalidpassword(generatedpassword):
+    if generatedpassword == "ghjaabcc":
+        print "found"
+
     foundrun = False
     firstpairindex = -1
     pairsfound = 0
@@ -34,7 +67,7 @@ def isvalidpassword(generatedpassword):
             if generatedpassword.__contains__(character + secondcharacter + thirdcharacter):
                 foundrun = True
 
-        if generatedpassword.index(character) < len(generatedpassword) - 2:
+        if generatedpassword.index(character) < len(generatedpassword) - 1:
             if generatedpassword.count(character + character) > 0:
                 if firstpairindex == -1:
                     firstpairindex = generatedpassword.index(character + character)
@@ -49,7 +82,7 @@ while foundValidPassword is False:
     data = nextpassword(data)
     foundValidPassword = isvalidpassword(data)
     counter += 1
-    print counter
+    print data
 
 print "Found password", data
 
