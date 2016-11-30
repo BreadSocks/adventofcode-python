@@ -1,46 +1,8 @@
 import itertools
 placesArray = []
 distanceDictionary = {}
-resultsDictionary = []
 
-def secondrecursiveloop(currentPlace, currentArray, currentDictionary):
-    xxplacearray = list(currentArray)
-    xxplacearray = xxplacearray.remove(currentPlace)
-
-    for nextPlace in xxplacearray:
-        key = currentPlace + "," + nextPlace
-        reverseKey = nextPlace + "," + currentPlace
-
-        dictionaryCopy = dict(currentDictionary)
-        if key in distanceDictionary:
-            dictionaryCopy[key] = distanceDictionary[key]
-            secondrecursiveloop(nextPlace, xxplacearray)
-        elif reverseKey in distanceDictionary:
-            dictionaryCopy[reverseKey] = distanceDictionary[reverseKey]
-            secondrecursiveloop(nextPlace, xxplacearray)
-
-    if len(xxplacearray) == 0:
-        print "Solution Found", currentDictionary
-        resultsDictionary.append(currentDictionary)
-
-def recursiveLoopForPlaceInArray(currentPlace, currentArray, currentDictionary):
-    xplacearray = list(placesArray)
-    xplacearray.remove(currentPlace)
-
-    for nextPlace in xplacearray:
-        key = currentPlace + "," + nextPlace
-        reverseKey = nextPlace + "," + currentPlace
-
-        dictionaryCopy = dict(currentDictionary)
-        if key in distanceDictionary:
-            dictionaryCopy[key] = distanceDictionary[key]
-            secondrecursiveloop(nextPlace, xplacearray, currentDictionary)
-        elif reverseKey in distanceDictionary:
-            dictionaryCopy[reverseKey] = distanceDictionary[reverseKey]
-            secondrecursiveloop(nextPlace, xplacearray, currentDictionary)
-
-
-with open("example.txt") as inputFile:
+with open("input.txt") as inputFile:
     for line in inputFile:
         placesAndValue = map(str, line.replace("\n", "").split(" = "))
         distance = int(placesAndValue[1])
@@ -66,11 +28,11 @@ with open("example.txt") as inputFile:
 
 resultArray = []
 for route_tuple in listOfPossibleRoutes:
-    print route_tuple
+    # print route_tuple
     journey = {}
     # resultArray = []
     for index, item in enumerate(route_tuple):
-        print index, item
+        # print index, item
         if index + 1 >= len(route_tuple):
             continue
         # next = route_tuple[index + 1] if index + 1 < len(route_tuple) else route_tuple[0]
@@ -84,17 +46,22 @@ for route_tuple in listOfPossibleRoutes:
             journeyTime = distanceDictionary[alternateKey]
         journey[dictionaryKey] = journeyTime
         print item, next
-    print "Journey", journey
+    # print "Journey", journey
     resultArray.append(journey)
 
 print "\n"
 print resultArray
 print "Possible", len(resultArray), "Journeys"
 
+shortestDistance = 10000
 for journeyDictionary in resultArray:
     distance = 0
     journeyDestinations = ""
     for key, value in journeyDictionary.iteritems():
         journeyDestinations += key
         distance += value
-    print journeyDestinations, distance
+    # print journeyDestinations, distance
+    if distance < shortestDistance:
+        shortestDistance = distance
+
+print "Shorted Distance:", shortestDistance
