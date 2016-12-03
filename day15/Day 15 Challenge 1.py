@@ -3,7 +3,7 @@ import itertools
 
 ingredientArray = []
 # read file
-with open("example.txt") as inputFile:
+with open("input.txt") as inputFile:
     for line in inputFile:
         firstSplit = line.split(": ")
         name = firstSplit[0]
@@ -27,12 +27,22 @@ allRecipeMeasurements = []
 for measurement in targetCombinationArray:
     allRecipeMeasurements.extend(list(itertools.permutations(measurement)))
 
-measurementArray = []
+recipes = []
 
 for measurements in allRecipeMeasurements:
-    for measurement_index in len(measurements):
+    measurements_array = []
+    for measurement_index, measurement in enumerate(measurements):
         chosen_ingredient = ingredientArray[measurement_index]
         chosen_measurement = measurements[measurement_index]
         measure = Measure(chosen_ingredient, chosen_measurement)
+        measurements_array.append(measure)
+        print measure.ingredient.name, measure.measurement_score_array()
+    print "\n"
+    recipe = Recipe(measurements_array)
+    recipes.append(recipe)
 
+recipe_scores = []
+for recipe in recipes:
+    recipe_scores.append(recipe.recipe_score())
 
+print max(recipe_scores)
