@@ -1,53 +1,43 @@
-reindeerNameArray = []
-reindeerSpeedDictionary = {}
-reindeerSpeedDurationDictionary = {}
-reindeerRestDurationDictionary = {}
-reindeerResultDictionary = {}
+from reindeer import Reindeer
+
+reindeer_array = []
 
 maxTime = 2503
+# maxTime = 1000
 
-def fillDictionaries():
-    with open("input.txt") as inputFile:
-        for line in inputFile:
-            reindeerStringArray = line.split(" ")
-            reindeerName = reindeerStringArray[0]
-            reindeerSpeed = reindeerStringArray[3]
-            reindeerSpeedDuration = reindeerStringArray[6]
-            reindeerRestDuration = reindeerStringArray[13]
-            reindeerNameArray.append(reindeerName)
-            reindeerSpeedDictionary[reindeerName] = int(reindeerSpeed)
-            reindeerSpeedDurationDictionary[reindeerName] = int(reindeerSpeedDuration)
-            reindeerRestDurationDictionary[reindeerName] = int(reindeerRestDuration)
+with open("input.txt") as inputFile:
+    # with open("example.txt") as inputFile:
+    for line in inputFile:
+        reindeerStringArray = line.split(" ")
+        reindeerName = reindeerStringArray[0]
+        reindeerSpeed = reindeerStringArray[3]
+        reindeerSpeedDuration = reindeerStringArray[6]
+        reindeerRestDuration = reindeerStringArray[13]
+        reindeer = Reindeer(reindeerName, int(reindeerSpeed), int(reindeerSpeedDuration), int(reindeerRestDuration))
+        reindeer_array.append(reindeer)
+        print reindeer
 
-fillDictionaries()
+reindeer_at_front = []
 for second in range(maxTime):
-    for reindeer in reindeerNameArray:
-        
-for reindeer in reindeerNameArray:
-    distance = 0
-    secondsResting = 0
-    secondsFlying = 0
-    restTimeLeft = 0
-    startNextRun = True
-    skip = True
-    maxSprintDistance = (reindeerSpeedDictionary[reindeer] * reindeerSpeedDurationDictionary[reindeer])
-    for second in range(maxTime):
-        if restTimeLeft != 0:
-            restTimeLeft -= 1
-            secondsResting += 1
-            if restTimeLeft == 0:
-                startNextRun = True
-                skip = True
-        elif not skip and (distance >= maxSprintDistance and distance % maxSprintDistance == 0):
-            restTimeLeft = reindeerRestDurationDictionary[reindeer]
-            restTimeLeft -= 1  # for this round we rest
-            secondsResting += 1
-            startNextRun = False
-        elif startNextRun:
-            skip = False
-            distance += reindeerSpeedDictionary[reindeer]
-            secondsFlying += 1
-    reindeerResultDictionary[reindeer] = distance
-    print reindeer, "Rested for :", secondsResting, "seconds, Flew for :", secondsFlying
-print reindeerResultDictionary
-print "Fastest reindeer travelled ", max(reindeerResultDictionary.itervalues()), " km"
+    # they should all travel before awarding points
+    for reindeer in reindeer_array:
+        reindeer.travel()
+
+    # work out who is at the front
+    for reindeer in reindeer_array:
+        if len(reindeer_at_front) == 0:
+            reindeer_at_front.append(reindeer)
+        else:
+            if reindeer.distance_travelled > reindeer_at_front[0].distance_travelled:
+                reindeer_at_front = []
+                reindeer_at_front.append(reindeer)  # replace
+            elif reindeer.distance_travelled == reindeer_at_front[
+                0].distance_travelled and reindeer not in reindeer_at_front:
+                reindeer_at_front.append(reindeer)
+
+    # award reindeer at the front
+    for reindeer in reindeer_at_front:
+        reindeer.award_point()
+
+for reindeer in reindeer_array:
+    reindeer.final_stats()

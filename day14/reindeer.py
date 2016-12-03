@@ -14,13 +14,18 @@ class Reindeer:
         self.start_next_run = True
         self.skip = True
 
+        self.points = 0  # part 2
+
     def __str__(self):
         return "Name : " + self.name + "\tSpeed : " + str(self.speed) \
                + "\tSpeed Duration : " + str(self.speed_duration) + "\tSprint Distance : " + str(self.sprint_distance) \
                + "\tRest Duration : " + str(self.rest_duration)
 
+    def award_point(self):
+        self.points += 1
+
     def final_stats(self):
-        print self.name, "Travelled : " + str(self.distance_travelled)
+        print self.name, "Travelled : " + str(self.distance_travelled) + "\tPoints : " + str(self.points)
 
     def travel(self):
         if self.time_left_resting != 0:
