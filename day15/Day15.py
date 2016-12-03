@@ -61,3 +61,9 @@ class Recipe:
             return 0
         else:
             return capacity * flavour * durability * texture
+
+    def is_500_calories(self):
+        calories = 0
+        for measurement in self.measurements_array:
+            calories += measurement.calories_score()
+        return calories == 500
